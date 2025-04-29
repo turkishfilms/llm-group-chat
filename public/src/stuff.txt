@@ -1,0 +1,1 @@
+npm install tailwindcss class-variance-authority tailwind-merge lucide-react
