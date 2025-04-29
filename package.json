@@ -1,0 +1,31 @@
+{
+  "name": "llm-group-chat",
+  "version": "0.0.1",
+  "description": "LLM-Group-Chat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taborgreat/llm-group-chat.git"
+  },
+  "keywords": [
+    "llm",
+    "groupchat",
+    "research"
+  ],
+  "author": "Taborgreat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/taborgreat/llm-group-chat/issues"
+  },
+  "homepage": "https://github.com/taborgreat/llm-group-chat#readme",
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "express": "^5.1.0",
+    "framer-motion": "^12.9.2",
+    "lucide-react": "^0.501.0",
+    "tailwindcss": "^4.1.4"
+  }
+}
