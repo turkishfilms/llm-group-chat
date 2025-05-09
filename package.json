@@ -1,31 +1,39 @@
 {
   "name": "llm-group-chat",
-  "version": "0.0.1",
-  "description": "LLM-Group-Chat",
-  "main": "index.js",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/taborgreat/llm-group-chat.git"
-  },
-  "keywords": [
-    "llm",
-    "groupchat",
-    "research"
-  ],
-  "author": "Taborgreat",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/taborgreat/llm-group-chat/issues"
-  },
-  "homepage": "https://github.com/taborgreat/llm-group-chat#readme",
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.2",
+    "@tailwindcss/vite": "^4.1.6",
     "class-variance-authority": "^0.7.1",
-    "express": "^5.1.0",
-    "framer-motion": "^12.9.2",
-    "lucide-react": "^0.501.0",
-    "tailwindcss": "^4.1.4"
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.10.5",
+    "lucide-react": "^0.509.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.2.0",
+    "tailwindcss": "^4.1.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@types/node": "^22.15.17",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "tw-animate-css": "^1.2.9",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5"
   }
 }
