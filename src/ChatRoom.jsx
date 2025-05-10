@@ -4,21 +4,62 @@ import MessageList from "./components/MessageList";
 import MessageInput from "./components/MessageInput";
 
 export default function ChatRoom() {
-	const [messages, setMessages] = useState([
-		{ id: 0, author: "System", text: "Welcome to the chat!" },
-	]);
+
 	const [draft, setDraft] = useState("");
-	const [username, setUsername] = useState("Farquad");
+	const [username, setUsername] = useState("Turkishfilms");
+	const [chatroomId, setChatroomId] = useState(1);
 	const listRef = useRef(null);
+	const [messages, setMessages] = useState([
+		{ time: 0, username: "System", message: "Welcome to the chat!" },
+	]);
+
+	const addMessagesToChat = (newMessages) => {
+		setMessages((current) => {
+			const existingIds = new Set(current.map(msg => msg.time));
+			const uniqueMessages = newMessages.filter(msg => !existingIds.has(msg.time));
+			return [...current, ...uniqueMessages];
+		});
+	};
+
+	const fetchMessagesFromServer = async () => {
+		const res = await fetch(`/chatMessages/${chatroomId}`)
+		const serverMessages = await res.json()
+		addMessagesToChat(serverMessages.chatMessages)
+	}
+
+	const sendMessageToServer = (message) => {
+		fetch('/newMessage', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				username: username,
+				time: Date.now(),
+				message: message,
+				chatroomId: chatroomId
+			})
+		})
+	}
 
 	const handleSend = () => {
 		if (!draft.trim()) return;
 		setMessages((prev) => [
 			...prev,
-			{ id: Date.now(), author: username, text: draft.trim() },
+			{ time: Date.now(), username: username, message: draft.trim() },
 		]);
 		setDraft("");
+		sendMessageToServer(draft.trim())
 	};
+
+	const FIVE_SECONDS = 5 * 1000
+	useEffect(() => {
+		const interval = setInterval(() => {
+			fetchMessagesFromServer();
+		}, FIVE_SECONDS);
+
+		return () => clearInterval(interval); // clean up on unmount
+	}, [])
 
 	useEffect(() => {
 		if (listRef.current) {
@@ -31,7 +72,7 @@ export default function ChatRoom() {
 			<Card className="w-full max-w-screen h-[80vh] flex flex-col shadow-lg rounded-2xl">
 				<CardHeader className="text-xl font-semibold">ChatRoom</CardHeader>
 				<CardContent className="flex-1 overflow-hidden flex flex-col">
-					<MessageList messages={messages} listRef={listRef} />
+					<MessageList messages={messages} listRef={listRef} username={username} />
 					<MessageInput
 						draft={draft}
 						setDraft={setDraft}
