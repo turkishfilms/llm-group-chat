@@ -21,7 +21,7 @@ const getChatMessages = async (req, res) => {
 
 const postNewMessage = async (req, res) => {
   try {
-    const { chatroomId, username, message /*, isHuman*/ } = req.body;
+    const { chatroomId, username, message } = req.body;
 
     if (!chatroomId || !username || !message) {
       return res.status(400).json({ error: "All fields are required" });
@@ -37,7 +37,7 @@ const postNewMessage = async (req, res) => {
       .status(201)
       .json({ message: "Chat message saved", chatMessage: newChatMessage });
     //this is where the function could be to send chat to llm for response, which once received gets posted
-    // as postNewMessage (needs to know if human or ai posting to prevent infinite ai loop)
+    // as newChatMessage
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
