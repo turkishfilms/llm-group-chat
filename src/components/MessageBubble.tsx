@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-export default function MessageBubble({ author, text }) {
-  const isYou = author === "You";
+export default function MessageBubble({ username, author, text }) {
+  const isYou = author === username; //fix this
   return (
     <motion.div
       initial={{ opacity: 0, translateY: 10 }}
@@ -12,7 +12,7 @@ export default function MessageBubble({ author, text }) {
         : "self-start bg-gray-800 text-gray-100"
         }`}
     >
-      {text}
+      {`${author}: ${text}`}
     </motion.div>
   );
 }
