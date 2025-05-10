@@ -6,22 +6,24 @@ import { Button } from "./components/ui/button";
 import { Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-/**
- * Basic React chatroom component.
- * Keeps messages in local state; ready to wire up to WebSockets or REST later.
- */
 export default function ChatRoom() {
 	const [messages, setMessages] = useState([
 		{ id: 0, author: "System", text: "Welcome to the chat!" },
 	]);
 	const [draft, setDraft] = useState("");
 
-	const listRef = useRef(null); // ✅ works in `.jsx`
+	const [username, setUsername] = useState("Farquad")
+	const listRef = useRef(null);
+
+	const handleUsernameChange = name => {
+		setUsername(name)
+	}
+
 	const handleSend = () => {
 		if (!draft.trim()) return;
 		setMessages((prev) => [
 			...prev,
-			{ id: Date.now(), author: "You", text: draft.trim() },
+			{ id: Date.now(), author: username, text: draft.trim() },
 		]);
 		setDraft("");
 	};
@@ -34,11 +36,10 @@ export default function ChatRoom() {
 	}, [messages]);
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-950 text-gray-50 p-4">
-			<Card className="w-full max-w-xl h-[70vh] flex flex-col shadow-lg rounded-2xl">
+		<div className="min-h-screen flex items-center justify-center bg-gray-600 text-gray-50 p-4">
+			<Card className="w-full max-w-screen h-[80vh] flex flex-col shadow-lg rounded-2xl">
 				<CardHeader className="text-xl font-semibold">ChatRoom</CardHeader>
 				<CardContent className="flex-1 overflow-hidden flex flex-col">
-					{/* Message list */}
 					<div
 						ref={listRef}
 						className="flex-1 overflow-y-auto space-y-2 pr-2 mb-4 scrollbar-thin scrollbar-thumb-gray-700"
@@ -60,7 +61,6 @@ export default function ChatRoom() {
 						</AnimatePresence>
 					</div>
 
-					{/* Input */}
 					<div className="grid grid-cols-[1fr_auto] gap-2">
 						<Input
 							placeholder="Type a message..."
