@@ -14,7 +14,9 @@ const connectDB = async () => {
 };
 
 const getMessagesByChatroom = async (chatroomId) => {
-  return await ChatMessage.find({ chatroomId }).sort({ timestamp: 1 });
+  return await ChatMessage.find({ chatroomId })
+    .sort({ timestamp: 1 })
+    .select("username message timestamp -_id"); // explicitly include and exclude fields
 };
 
 const saveNewMessage = async ({ chatroomId, username, message, time }) => {
