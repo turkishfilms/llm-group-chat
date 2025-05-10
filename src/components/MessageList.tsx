@@ -1,7 +1,7 @@
 import { AnimatePresence } from "framer-motion";
 import MessageBubble from "./MessageBubble";
 
-export default function MessageList({ messages, listRef }) {
+export default function MessageList({ messages, listRef, username }) {
   return (
     <div
       ref={listRef}
@@ -9,7 +9,7 @@ export default function MessageList({ messages, listRef }) {
     >
       <AnimatePresence initial={false}>
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} author={msg.author} text={msg.text} />
+          <MessageBubble key={msg._id || msg.time} author={msg.username} text={msg.message} username={username} />
         ))}
       </AnimatePresence>
     </div>
