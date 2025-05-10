@@ -1,4 +1,4 @@
-import ChatRoom from './ChatRoom.jsx'
+import ChatRoom from './ChatRoom2.jsx'
 function App() {
 
   return (
