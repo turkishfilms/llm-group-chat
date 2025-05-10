@@ -1,5 +1,5 @@
-///pulls functions from db handler to build functionality to be forwarded to routes
 const { getMessagesByChatroom, saveNewMessage } = require("../db/handler");
+const getLLMResponse = require("./llmResponse");
 
 const getChatMessages = async (req, res) => {
   try {
@@ -33,11 +33,27 @@ const postNewMessage = async (req, res) => {
       message,
     });
 
+    //this is where the function could be to send chat to llm for response, which once received gets posted
+    // as newChatMessage to save to db
+    const chatLog = await getMessagesByChatroom(chatroomId);
+
+    const aiReply = await getLLMResponse({
+      personality:
+        "maintain peace and mediate the conversation pointing out logical fallacies",
+      chatlog: chatLog,
+    });
+
+    if (aiReply && aiReply.trim() !== "No response needed") {
+      await saveNewMessage({
+        chatroomId,
+        username: "AI",
+        message: aiReply,
+      });
+    }
+
     res
       .status(201)
       .json({ message: "Chat message saved", chatMessage: newChatMessage });
-    //this is where the function could be to send chat to llm for response, which once received gets posted
-    // as newChatMessage
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
