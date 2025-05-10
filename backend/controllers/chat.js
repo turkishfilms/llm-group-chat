@@ -21,16 +21,16 @@ const getChatMessages = async (req, res) => {
 
 const postNewMessage = async (req, res) => {
   try {
-    const { chatroomId, username, message } = req.body;
+    const { chatroomId, username, message, time } = req.body;
 
     if (!chatroomId || !username || !message) {
       return res.status(400).json({ error: "All fields are required" });
     }
-
     const newChatMessage = await saveNewMessage({
       chatroomId,
       username,
       message,
+      time,
     });
 
     res

@@ -17,8 +17,8 @@ const getMessagesByChatroom = async (chatroomId) => {
   return await ChatMessage.find({ chatroomId }).sort({ timestamp: 1 });
 };
 
-const saveNewMessage = async ({ chatroomId, username, message }) => {
-  const newMessage = new ChatMessage({ chatroomId, username, message });
+const saveNewMessage = async ({ chatroomId, username, message, time }) => {
+  const newMessage = new ChatMessage({ chatroomId, username, message, timestamp: time });
   return await newMessage.save();
 };
 
