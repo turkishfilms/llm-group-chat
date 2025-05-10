@@ -15,8 +15,8 @@ export default function ChatRoom() {
 		{ id: 0, author: "System", text: "Welcome to the chat!" },
 	]);
 	const [draft, setDraft] = useState("");
-	const listRef = useRef < HTMLDivElement > (null);
 
+	const listRef = useRef(null); // ✅ works in `.jsx`
 	const handleSend = () => {
 		if (!draft.trim()) return;
 		setMessages((prev) => [
@@ -51,7 +51,7 @@ export default function ChatRoom() {
 									animate={{ opacity: 1, translateY: 0 }}
 									exit={{ opacity: 0, translateY: -10 }}
 									transition={{ duration: 0.2 }}
-									className={`max-w-[80%] px-4 py-2 rounded-2xl shadow bg-gray-800 ${msg.author === "You" ? "self-end bg-blue-600" : "self-start"
+									className={`max-w-[80%] px-4 py-2 rounded-2xl shadow bg-gray-800 ${msg.author === "You" ? "self-end bg-blue-600 text-white" : "self-start bg-gray-800 text-gray-100"
 										}`}
 								>
 									{msg.text}
