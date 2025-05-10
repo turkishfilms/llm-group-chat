@@ -1,25 +1,31 @@
-import { useState, useRef, useEffect } from "react";
-import { Card, CardHeader, CardContent } from "./components/ui/card";
-import MessageList from "./components/MessageList";
-import MessageInput from "./components/MessageInput";
+import { useState, useRef, useEffect } from "react"
+import { Card, CardHeader, CardContent } from "./components/ui/card"
+import MessageList from "./components/MessageList"
+import MessageInput from "./components/MessageInput"
 
 export default function ChatRoom() {
 
-	const [draft, setDraft] = useState("");
-	const [username, setUsername] = useState("Turkishfilms");
-	const [chatroomId, setChatroomId] = useState(1);
-	const listRef = useRef(null);
-	const [messages, setMessages] = useState([
-		{ time: 0, username: "System", message: "Welcome to the chat!" },
-	]);
+	const [draft, setDraft] = useState("")							//Current message being typed
+	const [username, setUsername] = useState("Turkishfilms")		//Current Username
+	const [chatroomId, setChatroomId] = useState(1)					//Current ChatRoomId
+	const listRef = useRef(null)									//Connection to Chat list DOM element
+	const [messages, setMessages] = useState([{						//Messages are {time, username, message}
+		time: 0,
+		username: "System",
+		message: "Welcome to the chat!",
+		chatroomId: chatroomId,
+	},])
+
+
+	const getNonDuplicateMessages = (serverMessages, clientMessages) => {
+		const currentIds = new Set(clientMessages.map(msg => msg.time))
+		const newMessages = serverMessages.filter(msg => !currentIds.has(msg.time))
+		return newMessages
+	}
 
 	const addMessagesToChat = (newMessages) => {
-		setMessages((current) => {
-			const existingIds = new Set(current.map(msg => msg.time));
-			const uniqueMessages = newMessages.filter(msg => !existingIds.has(msg.time));
-			return [...current, ...uniqueMessages];
-		});
-	};
+		setMessages((current) => [...current, ...getNonDuplicateMessages(newMessages, current)])
+	}
 
 	const fetchMessagesFromServer = async () => {
 		const res = await fetch(`/chatMessages/${chatroomId}`)
@@ -43,29 +49,30 @@ export default function ChatRoom() {
 	}
 
 	const handleSend = () => {
-		if (!draft.trim()) return;
+		const message = draft.trim()
+		if (!message) return		//if no draft no send
 		setMessages((prev) => [
 			...prev,
-			{ time: Date.now(), username: username, message: draft.trim() },
-		]);
-		setDraft("");
-		sendMessageToServer(draft.trim())
-	};
+			{ time: Date.now(), username: username, message: message, chatRoomId: chatroomId },
+		])
+		setDraft("")
+		sendMessageToServer(message)
+	}
 
 	const FIVE_SECONDS = 5 * 1000
 	useEffect(() => {
-		const interval = setInterval(() => {
-			fetchMessagesFromServer();
-		}, FIVE_SECONDS);
+		const interval = setInterval(() => {	//fetch messages every five seconds
+			fetchMessagesFromServer()
+		}, FIVE_SECONDS)
 
-		return () => clearInterval(interval); // clean up on unmount
+		return () => clearInterval(interval)	//clean up on unmount
 	}, [])
 
-	useEffect(() => {
+	useEffect(() => {							//Always scroll to bottom of chat on new message
 		if (listRef.current) {
-			listRef.current.scrollTop = listRef.current.scrollHeight;
+			listRef.current.scrollTop = listRef.current.scrollHeight
 		}
-	}, [messages]);
+	}, [messages])
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gray-600 text-gray-50 p-4">
@@ -81,6 +88,6 @@ export default function ChatRoom() {
 				</CardContent>
 			</Card>
 		</div>
-	);
+	)
 }
 
