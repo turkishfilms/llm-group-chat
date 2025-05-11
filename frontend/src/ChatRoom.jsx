@@ -10,7 +10,7 @@ export default function ChatRoom() {
 	const [chatroomId, setChatroomId] = useState(1)					//Current ChatRoomId
 	const listRef = useRef(null)									//Connection to Chat list DOM element
 	const [messages, setMessages] = useState([{						//Messages are {time, username, message}
-		time: 0,
+		timestamp: 0,
 		username: "System",
 		message: "Welcome to the chat!",
 		chatroomId: chatroomId,
@@ -18,13 +18,17 @@ export default function ChatRoom() {
 
 
 	const getNonDuplicateMessages = (serverMessages, clientMessages) => {
-		const currentIds = new Set(clientMessages.map(msg => msg.time))
-		const newMessages = serverMessages.filter(msg => !currentIds.has(msg.time))
+		const currentIds = new Set(clientMessages.map(msg => msg.timestamp))
+		const newMessages = serverMessages.filter(msg => !currentIds.has(msg.timestamp))
+		console.log('gNDM Mesgs', newMessages)
 		return newMessages
 	}
 
 	const addMessagesToChat = (newMessages) => {
-		setMessages((current) => [...current, ...getNonDuplicateMessages(newMessages, current)])
+		setMessages((current) => {
+			console.log('aMTC', current)
+			return [...current, ...getNonDuplicateMessages(newMessages, current)]
+		})
 	}
 
 	const fetchMessagesFromServer = async () => {
@@ -41,7 +45,7 @@ export default function ChatRoom() {
 			},
 			body: JSON.stringify({
 				username: username,
-				time: Date.now(),
+				timestamp: Date.now(),
 				message: message,
 				chatroomId: chatroomId
 			})
@@ -53,7 +57,7 @@ export default function ChatRoom() {
 		if (!message) return		//if no draft no send
 		setMessages((prev) => [
 			...prev,
-			{ time: Date.now(), username: username, message: message, chatRoomId: chatroomId },
+			{ timestamp: Date.now(), username: username, message: message, chatRoomId: chatroomId },
 		])
 		setDraft("")
 		sendMessageToServer(message)

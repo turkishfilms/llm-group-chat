@@ -9,7 +9,7 @@ export default function MessageList({ messages, listRef, username }) {
     >
       <AnimatePresence initial={false}>
         {messages.map((msg) => (
-          <MessageBubble key={msg._id || msg.time} author={msg.username} text={msg.message} username={username} />
+          <MessageBubble key={msg._id || msg.timestamp} author={msg.username} text={msg.message} username={username} />
         ))}
       </AnimatePresence>
     </div>

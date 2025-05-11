@@ -11,7 +11,7 @@ const getLLMResponse = async (data) => {
   } = data;
 
   const prompt = `You are username AI (with a need to ${personality}). Generate a response as AI if needed based off of this conversation. If you don't need to respond, then say back 'No response needed'.\n\n${chatlog}`;
-  console.log("Prompt to AI:", prompt);
+  // console.log("Prompt to AI:", prompt);
 
   const payload = {
     messages: [{ role: "user", content: prompt }],
@@ -29,7 +29,7 @@ const getLLMResponse = async (data) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.QROQ_KEY}`,
+          Authorization: `Bearer ${process.env.GROQ_CLOUD_API_KEY}`,
         },
         body: JSON.stringify(payload),
       }

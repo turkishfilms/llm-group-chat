@@ -21,7 +21,7 @@ const getChatMessages = async (req, res) => {
 
 const postNewMessage = async (req, res) => {
   try {
-    const { chatroomId, username, message, time } = req.body;
+    const { chatroomId, username, message, timestamp } = req.body;
 
     if (!chatroomId || !username || !message) {
       return res.status(400).json({ error: "All fields are required" });
@@ -30,7 +30,7 @@ const postNewMessage = async (req, res) => {
       chatroomId,
       username,
       message,
-      time,
+      timestamp,
     });
 
     //this is where the function could be to send chat to llm for response, which once received gets posted
@@ -48,6 +48,7 @@ const postNewMessage = async (req, res) => {
         chatroomId,
         username: "AI",
         message: aiReply,
+        timestamp: Date.now(),
       });
     }
 

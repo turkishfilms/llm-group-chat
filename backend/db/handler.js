@@ -19,8 +19,8 @@ const getMessagesByChatroom = async (chatroomId) => {
     .select("username message timestamp -_id"); // explicitly include and exclude fields
 };
 
-const saveNewMessage = async ({ chatroomId, username, message, time }) => {
-  const newMessage = new ChatMessage({ chatroomId, username, message, timestamp: time });
+const saveNewMessage = async ({ chatroomId, username, message, timestamp }) => {
+  const newMessage = new ChatMessage({ chatroomId, username, message, timestamp: timestamp });
   return await newMessage.save();
 };
 
