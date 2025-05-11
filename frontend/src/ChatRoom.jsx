@@ -10,9 +10,9 @@ export default function ChatRoom() {
 	const [chatroomId, setChatroomId] = useState(1)					//Current ChatRoomId
 	const listRef = useRef(null)									//Connection to Chat list DOM element
 	const [messages, setMessages] = useState([{						//Messages are {time, username, message}
-		timestamp: Date.now(),
 		username: "System",
 		message: "Welcome to the chat!",
+		timestamp: Date.now(),
 		chatroomId: chatroomId,
 	},])
 	const messageRef = useRef(messages)									//Connection to messages
@@ -25,7 +25,11 @@ export default function ChatRoom() {
 	}
 
 	const handleServerMessages = (newMessages) => {
-		const uniques = getNonDuplicateMessages(newMessages, messageRef.current)
+		const newMessagesDateNormal = newMessages.map(msg => ({
+			...msg,
+			timestamp: new Date(msg.timestamp).getTime(),
+		}))
+		const uniques = getNonDuplicateMessages(newMessagesDateNormal, messageRef.current)
 
 		if (uniques.length == 0) return
 		addMessagesToChat(uniques)
@@ -43,7 +47,7 @@ export default function ChatRoom() {
 		handleServerMessages(serverMessages.chatMessages)
 	}
 
-	const sendMessageToServer = (message) => {
+	const sendMessageToServer = (message, date) => {
 		fetch('/newMessage', {
 			method: 'POST',
 			headers: {
@@ -51,8 +55,8 @@ export default function ChatRoom() {
 			},
 			body: JSON.stringify({
 				username: username,
-				timestamp: Date.now(),
 				message: message,
+				timestamp: date,
 				chatroomId: chatroomId
 			})
 		})
@@ -61,14 +65,15 @@ export default function ChatRoom() {
 	const handleSend = () => {
 		const message = draft.trim()
 		if (!message) return		//if no draft no send
+		const date = Date.now()
 		addMessagesToChat([{
-			timestamp: Date.now(),
 			username: username,
 			message: message,
-			chatRoomId: chatroomId
+			timestamp: date,
+			chatroomId: chatroomId
 		}])
 		setDraft("")
-		sendMessageToServer(message)
+		sendMessageToServer(message, date)
 	}
 
 	const FIVE_SECONDS = 5 * 1000
