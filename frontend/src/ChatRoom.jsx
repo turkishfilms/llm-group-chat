@@ -10,31 +10,37 @@ export default function ChatRoom() {
 	const [chatroomId, setChatroomId] = useState(1)					//Current ChatRoomId
 	const listRef = useRef(null)									//Connection to Chat list DOM element
 	const [messages, setMessages] = useState([{						//Messages are {time, username, message}
-		timestamp: 0,
+		timestamp: Date.now(),
 		username: "System",
 		message: "Welcome to the chat!",
 		chatroomId: chatroomId,
 	},])
+	const messageRef = useRef(messages)									//Connection to messages
 
 
 	const getNonDuplicateMessages = (serverMessages, clientMessages) => {
 		const currentIds = new Set(clientMessages.map(msg => msg.timestamp))
 		const newMessages = serverMessages.filter(msg => !currentIds.has(msg.timestamp))
-		console.log('gNDM Mesgs', newMessages)
 		return newMessages
 	}
 
-	const addMessagesToChat = (newMessages) => {
+	const handleServerMessages = (newMessages) => {
+		const uniques = getNonDuplicateMessages(newMessages, messageRef.current)
+
+		if (uniques.length == 0) return
+		addMessagesToChat(uniques)
+	}
+
+	const addMessagesToChat = (messages) => {
 		setMessages((current) => {
-			console.log('aMTC', current)
-			return [...current, ...getNonDuplicateMessages(newMessages, current)]
+			return [...current, ...messages]
 		})
 	}
 
 	const fetchMessagesFromServer = async () => {
 		const res = await fetch(`/chatMessages/${chatroomId}`)
 		const serverMessages = await res.json()
-		addMessagesToChat(serverMessages.chatMessages)
+		handleServerMessages(serverMessages.chatMessages)
 	}
 
 	const sendMessageToServer = (message) => {
@@ -55,10 +61,12 @@ export default function ChatRoom() {
 	const handleSend = () => {
 		const message = draft.trim()
 		if (!message) return		//if no draft no send
-		setMessages((prev) => [
-			...prev,
-			{ timestamp: Date.now(), username: username, message: message, chatRoomId: chatroomId },
-		])
+		addMessagesToChat([{
+			timestamp: Date.now(),
+			username: username,
+			message: message,
+			chatRoomId: chatroomId
+		}])
 		setDraft("")
 		sendMessageToServer(message)
 	}
@@ -76,6 +84,7 @@ export default function ChatRoom() {
 		if (listRef.current) {
 			listRef.current.scrollTop = listRef.current.scrollHeight
 		}
+		messageRef.current = messages
 	}, [messages])
 
 	return (
