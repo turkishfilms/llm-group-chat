@@ -2,13 +2,10 @@ import { useState, useRef, useEffect } from "react"
 import { Card, CardHeader, CardContent } from "./components/ui/card"
 import MessageList from "./components/MessageList"
 import MessageInput from "./components/MessageInput"
-import LandingPage from "./LandingPage"
 
-export default function ChatRoom() {
+export default function ChatRoom({ chatroomId, username, isActive }) {
 
 	const [draft, setDraft] = useState("")							//Current message being typed
-	const [username, setUsername] = useState("Turkishfilms")		//Current Username
-	const [chatroomId, setChatroomId] = useState(1)					//Current ChatRoomId
 	const listRef = useRef(null)									//Connection to Chat list DOM element
 	const [messages, setMessages] = useState([{						//Messages are {time, username, message}
 		username: "System",
@@ -17,12 +14,6 @@ export default function ChatRoom() {
 		chatroomId: chatroomId,
 	},])
 	const messageRef = useRef(messages)									//Connection to messages
-	const [shownPage, setShownPage] = useState("Landing")	//Landing or Chatroom
-
-	const handleLandingSend = () => {
-		setShownPage("Chatroom")
-		console.log("trying to send", 2)
-	}
 
 	const getNonDuplicateMessages = (serverMessages, clientMessages) => {
 		const currentIds = new Set(clientMessages.map(msg => msg.timestamp))
@@ -98,27 +89,23 @@ export default function ChatRoom() {
 		messageRef.current = messages
 	}, [messages])
 
-	if (shownPage == "Chatroom") {
-		return (<div className="min-h-screen flex items-center justify-center bg-gray-600 text-gray-50 p-4">
-			<Card className="w-full max-w-screen h-[80vh] flex flex-col shadow-lg rounded-2xl">
-				<CardHeader className="text-xl font-semibold">ChatRoom</CardHeader>
-				<CardContent className="flex-1 overflow-hidden flex flex-col">
-					<MessageList messages={messages} listRef={listRef} username={username} />
-					<MessageInput
-						draft={draft}
-						setDraft={setDraft}
-						handleSend={handleSend}
-					/>
-				</CardContent>
-			</Card>
-		</div>
-		)
-	}
-	else if (shownPage == "Landing") {
-		return (
-			<LandingPage setUsername={setUsername} setChatroomId={setChatroomId} handleLandingSend={handleLandingSend} />
-		)
-	}
+	if (!isActive) return null
 
+
+	return (<div className="min-h-screen flex items-center justify-center bg-gray-600 text-gray-50 p-4">
+		<Card className="w-full max-w-screen h-[80vh] flex flex-col shadow-lg rounded-2xl">
+			<CardHeader className="text-xl font-semibold">ChatRoom</CardHeader>
+			<CardContent className="flex-1 overflow-hidden flex flex-col">
+				<MessageList messages={messages} listRef={listRef} username={username} />
+				<MessageInput
+					draft={draft}
+					setDraft={setDraft}
+					handleSend={handleSend}
+				/>
+			</CardContent>
+		</Card>
+	</div>
+	)
 }
+
 
