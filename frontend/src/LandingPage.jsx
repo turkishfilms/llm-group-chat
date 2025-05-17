@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "./components/ui/button"
 
-export default function LandingPage({ isActive, setUsername, setChatroomId, handleLandingSend }) {
+export default function LandingPage({ isActive, setUsername, username, setChatroomId, chatroomId, handleLandingSend }) {
 	if (!isActive) return null
 	return (
 		<>
@@ -13,13 +13,18 @@ export default function LandingPage({ isActive, setUsername, setChatroomId, hand
 						placeholder="Username"
 						className="bg-[#5d5d5d] max-w-50 border-none text-white placeholder:text-neutral-100 mt-8"
 						onChange={(e) => setUsername(e.target.value)}
+						value={username}
 					></Input>
 					<Input
 						placeholder="ChatRoom ID:"
 						className="bg-[#5d5d5d] max-w-50 border-none mt-3 text-neutral-100 placeholder:text-white"
 						onChange={(e) => setChatroomId(e.target.value)}
+						value={chatroomId}
 					></Input>
-					<Button className="bg-[#3f463f] mt-6" onClick={handleLandingSend}>LETS CHAT</Button>
+					<Button className="bg-[#3f463f] mt-6" onClick={() => {
+						if (username && chatroomId) handleLandingSend()
+						else alert("Fill both fields")
+					}}>LETS CHAT</Button>
 				</CardContent>
 			</Card>
 		</>
