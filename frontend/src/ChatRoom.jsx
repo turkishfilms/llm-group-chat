@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react"
 import { Card, CardHeader, CardContent } from "./components/ui/card"
 import MessageList from "./components/MessageList"
 import MessageInput from "./components/MessageInput"
+import { Button } from "./components/ui/button"
 
-export default function ChatRoom({ chatroomId, username, isActive }) {
+export default function ChatRoom({ chatroomId, username, isActive, backToLanding }) {
 
 	const [draft, setDraft] = useState("")							//Current message being typed
 	const listRef = useRef(null)									//Connection to Chat list DOM element
@@ -92,19 +93,23 @@ export default function ChatRoom({ chatroomId, username, isActive }) {
 	if (!isActive) return null
 
 
-	return (<div className="min-h-screen flex items-center justify-center bg-gray-600 text-gray-50 p-4">
-		<Card className="w-full max-w-screen h-[80vh] flex flex-col shadow-lg rounded-2xl">
-			<CardHeader className="text-xl font-semibold">ChatRoom</CardHeader>
-			<CardContent className="flex-1 overflow-hidden flex flex-col">
-				<MessageList messages={messages} listRef={listRef} username={username} />
-				<MessageInput
-					draft={draft}
-					setDraft={setDraft}
-					handleSend={handleSend}
-				/>
-			</CardContent>
-		</Card>
-	</div>
+	return (
+		<>
+			<div className="relative min-h-screen flex items-center justify-center bg-gray-600 text-gray-50 p-4">
+				<Button className="absolute top-4 left-4 bg-neutral-200 hover:bg-neutral-500 text-black" onClick={backToLanding}>Back To Landing</Button>
+				<Card className="w-full max-w-screen h-[80vh] flex flex-col shadow-lg rounded-2xl">
+					<CardHeader className="text-xl font-semibold">ChatRoom</CardHeader>
+					<CardContent className="flex-1 overflow-hidden flex flex-col">
+						<MessageList messages={messages} listRef={listRef} username={username} />
+						<MessageInput
+							draft={draft}
+							setDraft={setDraft}
+							handleSend={handleSend}
+						/>
+					</CardContent>
+				</Card>
+			</div>
+		</>
 	)
 }
 
