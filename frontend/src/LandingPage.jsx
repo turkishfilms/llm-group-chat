@@ -2,8 +2,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "./components/ui/button"
 
-export default function LandingPage({ setUsername, setChatroomId, handleLandingSend }) {
-
+export default function LandingPage({ isActive, setUsername, setChatroomId, handleLandingSend }) {
+	if (!isActive) return null
 	return (
 		<>
 			<Card className="max-w-screen max-h-screen h-screen border-none rounded-none bg-zinc-700 ">
@@ -23,6 +23,5 @@ export default function LandingPage({ setUsername, setChatroomId, handleLandingS
 				</CardContent>
 			</Card>
 		</>
-
 	)
 }
