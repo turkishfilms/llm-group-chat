@@ -14,7 +14,6 @@ const getAgents = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
 const postNewAgent = async (req, res) => {
   try {
     const { chatroomId, name, active, personality, talkativeness, model } =
