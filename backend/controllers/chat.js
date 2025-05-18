@@ -56,7 +56,7 @@ const postNewMessage = async (req, res) => {
 
     //this is where the function could be to send chat to llm for response, which once received gets posted
     // as newChatMessage to save to db
-    /*
+
     const chatLog = await getMessagesByChatroom(chatroomId);
 
     const aiReply = await getLLMResponse({
@@ -72,7 +72,7 @@ const postNewMessage = async (req, res) => {
         message: aiReply,
         timestamp: Date.now(),
       });
-    }*/
+    }
 
     res
       .status(201)
