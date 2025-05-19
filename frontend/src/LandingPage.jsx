@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "./components/ui/button"
-import ChatroomList from "./ChatroomList"
+import ChatroomIdList from "./ChatroomIdList"
 
 export default function LandingPage({ isActive, setUsername, username, setChatroomId, chatroomId, handleLandingSend }) {
 	if (!isActive) return null
@@ -26,7 +26,7 @@ export default function LandingPage({ isActive, setUsername, username, setChatro
 						if (username && chatroomId) handleLandingSend()
 						else alert("Fill both fields")
 					}}>LETS CHAT</Button>
-					<ChatroomList setChatroomId={setChatroomId}/>
+					<ChatroomIdList setChatroomId={setChatroomId}/>
 				</CardContent>
 			</Card>
 			

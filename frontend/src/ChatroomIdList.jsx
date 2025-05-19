@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 //gets passed into landing page as a component. takes setchatroomId so it can update app.jsx when new id is clicked
-const ChatroomList = ({ setChatroomId }) => {
+const ChatroomIdList = ({ setChatroomId }) => {
   const [chatroomIds, setChatroomIds] = useState([]);
 
   useEffect(() => {
@@ -35,4 +35,4 @@ const ChatroomList = ({ setChatroomId }) => {
   );
 };
 
-export default ChatroomList;
+export default ChatroomIdList;
