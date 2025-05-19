@@ -83,6 +83,7 @@ export default function ChatRoom({
   const FIVE_SECONDS = 5 * 1000;
   useEffect(() => {
     // Reset messages when chatroom changes
+    if (!isActive) return; //since it doesnt unmount and always stays on this must be here
     setMessages([
       {
         username: "System",
