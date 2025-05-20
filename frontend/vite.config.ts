@@ -11,6 +11,9 @@ export default defineConfig({
       '/newMessage': 'http://localhost:3000',
       '/chatMessages': 'http://localhost:3000',
       '/uniqueChatroomIds': 'http://localhost:3000',
+      '/agentsByChatroomId': 'http://localhost:3000',
+      '/createNewAgent': 'http://localhost:3000',
+      '/editAgent': 'http://localhost:3000',
     },
   },
   resolve: {
