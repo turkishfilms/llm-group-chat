@@ -77,7 +77,7 @@ export default function ChatRoom({ chatroomId, username, isActive, backToLanding
 	const FIVE_SECONDS = 5 * 1000
 	useEffect(() => {
 		const interval = setInterval(() => {	//fetch messages every five seconds
-			fetchMessagesFromServer()
+			if (isActive) fetchMessagesFromServer()
 		}, FIVE_SECONDS)
 
 		return () => clearInterval(interval)	//clean up on unmount
