@@ -1,54 +1,31 @@
-# React + TypeScript + Vite
+# LLM Group Chat (Prototype)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+This is a real-time chat application where users can talk freely in a shared space while an AI language model observes and responds only under specific conditions. The system emphasizes open conversation with thoughtful, minimal AI intervention.
 
-Currently, two official plugins are available:
+## Core Features
+- **LLM-Mediated Chatroom**: Users can chat without interruption. The AI responds only when predefined conditions are met.
+- **AI Role Control**: Users define the AI's behavior and rules through three editable fields:
+  - **Personality**: Specifies the role the LLM should play.
+  - **Response Conditions**: Logical string that controls when the AI is allowed to speak.
+  - **Talkativeness**: Cooldown period (in seconds) between AI responses.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How It Works
+1. Users join a chatroom by entering a username and chatroom ID.
+2. Users can add an LLMAgent to the chatroom via the LLMAgent menu, adjusting settings as needed.
+3. After each message:
+   - The backend logs the raw message.
+   - The LLM is queried with recent chat context, personality, and response conditions (if the agent is not in cooldown).
+   - If the conditions are satisfied, the AI responds. Otherwise, it remains silent.
 
-## Expanding the ESLint configuration
+## Tech Stack
+- **Frontend**: React
+- **Backend**: Node.js, Express
+- **Database**: MongoDB
+- **LLM Integration**: Groq API
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Development Status
+- ✅ Real-time chat
+- ✅ AI response logic with conditions
+- ✅ Editable AI behavior in UI
+- ❌ No summarization or memory layers in this prototype

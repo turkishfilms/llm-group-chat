@@ -5,7 +5,7 @@ export default function App() {
 
   const [shownPage, setShownPage] = useState("LandingPage")	//Landing or Chatroom
   const [username, setUsername] = useState("")		//Current Username
-  const [chatroomId, setChatroomId] = useState(0)					//Current ChatRoomId
+  const [chatroomId, setChatroomId] = useState("")					//Current ChatRoomId
 
   const handleLandingSend = () => {
     setShownPage("Chatroom")

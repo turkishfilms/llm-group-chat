@@ -1,5 +1,9 @@
-const { getMessagesByChatroom, saveNewMessage } = require("../db/handler");
-const getLLMResponse = require("./llmResponse");
+const {
+  getMessagesByChatroom,
+  saveNewMessage,
+  getAllChatroomIds,
+} = require("../db/handler");
+const { runLLMAgentTriggers } = require("./llmHandler");
 
 const getChatMessages = async (req, res) => {
   try {
@@ -13,6 +17,21 @@ const getChatMessages = async (req, res) => {
     }
 
     res.status(200).json({ chatMessages });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const getUniqueChatroomIds = async (req, res) => {
+  try {
+    const chatroomIds = await getAllChatroomIds();
+
+    if (!chatroomIds || chatroomIds.length === 0) {
+      return res.status(404).json({ error: "No chatroomIds found" });
+    }
+
+    res.status(200).json({ chatroomIds });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -33,24 +52,12 @@ const postNewMessage = async (req, res) => {
       timestamp,
     });
 
-    //this is where the function could be to send chat to llm for response, which once received gets posted
-    // as newChatMessage to save to db
-    const chatLog = await getMessagesByChatroom(chatroomId);
-
-    const aiReply = await getLLMResponse({
-      personality:
-        "maintain peace and mediate the conversation pointing out logical fallacies",
-      chatlog: chatLog,
+    await runLLMAgentTriggers({
+      chatroomId,
+      username,
+      message,
+      timestamp: timestamp || Date.now(),
     });
-
-    if (aiReply && aiReply.trim() !== "No response needed") {
-      await saveNewMessage({
-        chatroomId,
-        username: "AI",
-        message: aiReply,
-        timestamp: Date.now(),
-      });
-    }
 
     res
       .status(201)
@@ -63,5 +70,6 @@ const postNewMessage = async (req, res) => {
 
 module.exports = {
   getChatMessages,
+  getUniqueChatroomIds,
   postNewMessage,
 };

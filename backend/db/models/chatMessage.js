@@ -14,6 +14,11 @@ const chatMessageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  sender_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "LlmAgent",
+    default: null, // null for human messages, agent ID for LLMs
+  },
   timestamp: {
     type: Date,
     default: Date.now,
