@@ -3,9 +3,7 @@ const {
   saveNewMessage,
   getAllChatroomIds,
 } = require("../db/handler");
-const getLLMResponse = require("./llmResponse");
-
-//const llmHandler = require("./llmHandler");
+const { runLLMAgentTriggers } = require("./llmHandler");
 
 const getChatMessages = async (req, res) => {
   try {
@@ -54,25 +52,12 @@ const postNewMessage = async (req, res) => {
       timestamp,
     });
 
-    //this is where the function could be to send chat to llm for response, which once received gets posted
-    // as newChatMessage to save to db
-
-    const chatLog = await getMessagesByChatroom(chatroomId);
-
-    const aiReply = await getLLMResponse({
-      personality:
-        "maintain peace and mediate the conversation pointing out logical fallacies",
-      chatlog: chatLog,
+    await runLLMAgentTriggers({
+      chatroomId,
+      username,
+      message,
+      timestamp: timestamp || Date.now(),
     });
-
-    if (aiReply && aiReply.trim() !== "No response needed") {
-      await saveNewMessage({
-        chatroomId,
-        username: "AI",
-        message: aiReply,
-        timestamp: Date.now(),
-      });
-    }
 
     res
       .status(201)
