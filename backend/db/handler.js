@@ -18,19 +18,26 @@ const connectDB = async () => {
 const getMessagesByChatroom = async (chatroomId) => {
   return await ChatMessage.find({ chatroomId })
     .sort({ timestamp: 1 })
-    .select("username message timestamp -_id");
+    .select("username message timestamp sender_id -_id");
 };
 
 const getAllChatroomIds = async () => {
   return await ChatMessage.distinct("chatroomId");
 };
 
-const saveNewMessage = async ({ chatroomId, username, message, timestamp }) => {
+const saveNewMessage = async ({
+  chatroomId,
+  username,
+  message,
+  timestamp,
+  sender_id,
+}) => {
   const newMessage = new ChatMessage({
     chatroomId,
     username,
     message,
     timestamp,
+    sender_id,
   });
   return await newMessage.save();
 };
