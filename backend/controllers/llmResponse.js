@@ -1,17 +1,62 @@
+function formatChatlog(chat) {
+  return chat.map((entry) => `${entry.username}: ${entry.message}`).join("\n");
+}
+
 const getLLMResponse = async (data) => {
-  console.log("getLLMResponse called");
   const {
+    name,
     personality,
     chatlog,
-    model = "llama-3.1-8b-instant",
+    model,
     temperature = 1,
     max_tokens = 1024,
     top_p = 1,
     stop = null,
   } = data;
+  console.log("getLLMResponse called for: ", name);
+  // Use last 15 messages to reduce token usage
+  const limitedChatlog = chatlog.slice(-15);
+  const formattedChatlog = formatChatlog(limitedChatlog);
 
-  const prompt = `You are username AI (with a need to ${personality}). Generate a response as AI if needed based off of this conversation. If you don't need to respond, then say back 'No response needed'.\n\n${chatlog}`;
-  // console.log("Prompt to AI:", prompt);
+  console.log(formatChatlog);
+
+  // Try to get last message sent by the agent
+  const lastAgentMessage = [...chatlog]
+    .reverse()
+    .find((msg) => msg.username === name);
+
+  const lastMsgText = lastAgentMessage
+    ? `"${lastAgentMessage.message}"`
+    : "N/A";
+
+  const prompt = `
+You are ${name}, an AI character with the following personality traits: "${personality}".
+
+Your purpose is to participate in the conversation only if you can add something meaningful, interesting, or in-character.
+
+(This is the most recent conversation. Do not respond to stale or irrelevant parts of the log.)
+
+---
+
+Context:
+Here is the recent conversation between multiple participants:
+${formattedChatlog}
+
+The last thing you said was:
+"${lastMsgText}"
+
+---
+
+Instructions:
+- Think carefully about the full context.
+- Imagine how your personality would naturally respond to the last few lines.
+- Keep your response concise — aim for less than 500 characters or a natural length.
+- Only reply if your contribution moves the conversation forward, adds insight, humor, curiosity, or emotion consistent with your personality.
+- Your output should be **only the response text**, with no extra commentary, explanation, quotes, or formatting.
+- If you have no strong, interesting, or appropriate response, respond with exactly:
+  No response needed
+
+`.trim();
 
   const payload = {
     messages: [{ role: "user", content: prompt }],
@@ -29,7 +74,7 @@ const getLLMResponse = async (data) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.GROQ_KEY}`,
+          Authorization: `Bearer ${process.env.GROQ_CLOUD_API_KEY}`,
         },
         body: JSON.stringify(payload),
       }
@@ -40,12 +85,10 @@ const getLLMResponse = async (data) => {
     }
 
     const responseText = await response.text();
-
     const jsonResponse = JSON.parse(responseText);
 
     const aiReply =
       jsonResponse?.choices?.[0]?.message?.content || "No response needed";
-    console.log("AI Reply:", aiReply);
 
     return aiReply;
   } catch (error) {
