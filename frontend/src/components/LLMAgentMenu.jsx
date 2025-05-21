@@ -58,16 +58,18 @@ const LLMAgentMenu = ({ chatroomId }) => {
         </div>
       )}
 
-      {agents.length === 0 && !newAgentFormVisible && (
-        <div className="flex justify-center">
-          <button
-            onClick={() => setNewAgentFormVisible(true)}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-          >
-            + Add Agent
-          </button>
-        </div>
-      )}
+      {
+        /*agents.length === 0 && (for only 1)*/ !newAgentFormVisible && (
+          <div className="flex justify-center">
+            <button
+              onClick={() => setNewAgentFormVisible(true)}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+            >
+              + Add Agent
+            </button>
+          </div>
+        )
+      }
 
       {newAgentFormVisible && (
         <CreateLLMAgent
