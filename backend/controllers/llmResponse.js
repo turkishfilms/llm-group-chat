@@ -1,3 +1,7 @@
+function formatChatlog(chat) {
+  return chat.map((entry) => `${entry.username}: ${entry.message}`).join("\n");
+}
+
 const getLLMResponse = async (data) => {
   console.log("getLLMResponse called");
   const {
@@ -9,9 +13,9 @@ const getLLMResponse = async (data) => {
     top_p = 1,
     stop = null,
   } = data;
-
-  const prompt = `You are username AI (with a need to ${personality}). Generate a response as AI if needed based off of this conversation. If you don't need to respond, then say back 'No response needed'.\n\n${chatlog}`;
-  // console.log("Prompt to AI:", prompt);
+  let formattedChatlog = formatChatlog(chatlog);
+  console.log(formattedChatlog);
+  const prompt = `You are username AI (with a need to ${personality}). Generate a response as AI if needed based off of this conversation. If you don't need to respond, then say back 'No response needed'.\n\n${formattedChatlog}`;
 
   const payload = {
     messages: [{ role: "user", content: prompt }],
