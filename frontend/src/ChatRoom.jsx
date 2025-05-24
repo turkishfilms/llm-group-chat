@@ -3,6 +3,7 @@ import { Card, CardHeader, CardContent } from "./components/ui/card";
 import MessageList from "./components/MessageList";
 import MessageInput from "./components/MessageInput";
 import { Button } from "./components/ui/button";
+import LLmAgentMenu from "./components/LLMAgentMenu";
 
 export default function ChatRoom({
   chatroomId,
@@ -14,6 +15,7 @@ export default function ChatRoom({
   const listRef = useRef(null); //Connection to Chat list DOM element
   const [messages, setMessages] = useState([]);
   const messageRef = useRef(messages); //Connection to messages
+  const [showAgentMenu, setShowAgentMenu] = useState(false);
 
   const getNonDuplicateMessages = (serverMessages, clientMessages) => {
     const currentIds = new Set(clientMessages.map((msg) => msg.timestamp));
@@ -83,6 +85,7 @@ export default function ChatRoom({
   const FIVE_SECONDS = 5 * 1000;
   useEffect(() => {
     // Reset messages when chatroom changes
+
     setMessages([
       {
         username: "System",
@@ -121,6 +124,14 @@ export default function ChatRoom({
         >
           Back To Landing
         </Button>
+
+        <Button
+          className="absolute top-4 right-4 bg-blue-500 hover:bg-blue-600"
+          onClick={() => setShowAgentMenu((prev) => !prev)}
+        >
+          {showAgentMenu ? "Hide Agent Menu" : "Show Agent Menu"}
+        </Button>
+        {showAgentMenu && <LLmAgentMenu chatroomId={chatroomId} />}
         <Card className="w-full max-w-screen h-[80vh] flex flex-col shadow-lg rounded-2xl">
           <CardHeader className="text-xl font-semibold">ChatRoom</CardHeader>
           <CardContent className="flex-1 overflow-hidden flex flex-col">
