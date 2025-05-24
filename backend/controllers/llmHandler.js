@@ -78,7 +78,7 @@ async function runLLMAgentTriggers(message) {
   const total = activeAgents.length;
 
   for (const agent of activeAgents) {
-    await sleep(5000); // timer between and before first response (gives it thinking time feel)
+    await sleep(10000); // timer between and before first response (gives it thinking time feel)
     await maybeTriggerAgent(agent, message, total);
   }
 }
