@@ -3,9 +3,9 @@ import React, { useState } from "react";
 const CreateLLMAgent = ({ chatroomId, modelOptions, onCreated }) => {
   const [newAgent, setNewAgent] = useState({
     name: "",
-    active: false,
+    active: true,
     personality: "",
-    talkativeness: 0,
+    talkativeness: 10,
     model: modelOptions[0],
   });
 
@@ -37,6 +37,7 @@ const CreateLLMAgent = ({ chatroomId, modelOptions, onCreated }) => {
           <label className="text-gray-300 text-sm">{field}</label>
           {field === "model" ? (
             <select
+              required
               className="w-full bg-zinc-900 text-white p-1 rounded mt-1"
               value={newAgent.model}
               onChange={(e) =>
@@ -51,6 +52,7 @@ const CreateLLMAgent = ({ chatroomId, modelOptions, onCreated }) => {
             </select>
           ) : (
             <input
+              required
               className="w-full bg-zinc-900 text-white p-1 rounded mt-1"
               type="text"
               value={newAgent[field]}
@@ -65,6 +67,7 @@ const CreateLLMAgent = ({ chatroomId, modelOptions, onCreated }) => {
       <div className="mb-3">
         <label className="text-gray-300 text-sm">talkativeness</label>
         <input
+          required
           className="w-full bg-zinc-900 text-white p-1 rounded mt-1"
           type="number"
           value={newAgent.talkativeness}
