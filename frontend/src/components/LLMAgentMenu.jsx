@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import CreateLLMAgent from "./CreateLLMAgent";
 import EditLLMAgent from "./EditLLMAgent";
 
-const modelOptions = ["llama-3.1-8b-instant"];
+const modelOptions = [
+  "llama-3.3-70b-versatile",
+  "llama-3.1-8b-instant",
+  "deepseek-r1-distill-llama-70b",
+];
 
 const LLMAgentMenu = ({ chatroomId }) => {
   const [agents, setAgents] = useState([]);

@@ -28,7 +28,11 @@ const llmAgentSchema = new mongoose.Schema({
   model: {
     type: String,
     required: true,
-    enum: ["llama-3.1-8b-instant"], // Can add more as needed
+    enum: [
+      "llama-3.1-8b-instant",
+      "llama-3.3-70b-versatile",
+      "deepseek-r1-distill-llama-70b",
+    ], // Can add more as needed
   },
   timeCreated: {
     type: Date,
