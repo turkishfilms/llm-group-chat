@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
 
-//gets passed into landing page as a component. takes setchatroomId so it can update app.jsx when new id is clicked
 const ChatroomIdList = ({ setChatroomId }) => {
   const [chatroomIds, setChatroomIds] = useState([]);
 
   useEffect(() => {
     fetch("/uniqueChatroomIds")
-      .then((res) => res.json())
-      .then((data) => setChatroomIds(data.chatroomIds))
-      .catch((err) => console.error("Error fetching chatroom IDs:", err));
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch");
+        return res.json();
+      })
+      .then((data) => {
+        setChatroomIds(data.chatroomIds || []);
+      })
+      .catch((err) => {
+        console.error("Error fetching chatroom IDs:", err);
+        setChatroomIds([]); // Fallback to empty array
+      });
   }, []);
 
   return (
-    <div className="bg-zinc-700 p-4 mt-8 w-full max-w-sm max-h-[50vh] overflow-y-auto ">
+    <div className="bg-zinc-700 p-4 mt-8 w-full max-w-sm max-h-[50vh] overflow-y-auto">
       <h2 className="text-center font-bold text-lg text-white mb-4">
         Active Chatroom Id's
       </h2>
+
       {chatroomIds.length > 0 ? (
         <ul className="space-y-2">
           {chatroomIds.map((id, index) => (
@@ -29,7 +37,7 @@ const ChatroomIdList = ({ setChatroomId }) => {
           ))}
         </ul>
       ) : (
-        <p className="text-center text-gray-400">Loading...</p>
+        <p className="text-center text-gray-400">No chatrooms found</p>
       )}
     </div>
   );

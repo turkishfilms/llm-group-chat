@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import CreateLLMAgent from "./CreateLLMAgent";
 import EditLLMAgent from "./EditLLMAgent";
 
-const modelOptions = ["llama-3.1-8b-instant"];
+const modelOptions = [
+  "llama-3.3-70b-versatile",
+  "llama-3.1-8b-instant",
+  "deepseek-r1-distill-llama-70b",
+];
 
 const LLMAgentMenu = ({ chatroomId }) => {
   const [agents, setAgents] = useState([]);
@@ -40,7 +44,7 @@ const LLMAgentMenu = ({ chatroomId }) => {
   return (
     <div className="bg-zinc-700 p-4 mt-8 w-full max-w-md max-h-[70vh] overflow-y-auto rounded shadow">
       <h2 className="text-white text-lg font-semibold mb-4 text-center">
-        Agent in Room {chatroomId}
+        Agents in Room {chatroomId}
       </h2>
 
       {agents.length > 0 ? (
@@ -54,7 +58,7 @@ const LLMAgentMenu = ({ chatroomId }) => {
         ))
       ) : (
         <div className="text-center text-gray-300 mb-4">
-          No agent found in this room.
+          No agents found in this room.
         </div>
       )}
 
