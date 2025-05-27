@@ -16,8 +16,15 @@ const getAgents = async (req, res) => {
 };
 const postNewAgent = async (req, res) => {
   try {
-    const { chatroomId, name, active, personality, talkativeness, model } =
-      req.body;
+    const {
+      chatroomId,
+      name,
+      active,
+      personality,
+      responseConditions,
+      talkativeness,
+      model,
+    } = req.body;
 
     if (
       !chatroomId ||
@@ -37,6 +44,7 @@ const postNewAgent = async (req, res) => {
       name,
       active,
       personality,
+      responseConditions,
       talkativeness,
       model,
     });

@@ -52,6 +52,7 @@ const createNewAgent = async ({
   name,
   active,
   personality,
+  responseConditions,
   talkativeness,
   model,
 }) => {
@@ -60,6 +61,7 @@ const createNewAgent = async ({
     name,
     active,
     personality,
+    responseConditions,
     talkativeness,
     model,
   });
