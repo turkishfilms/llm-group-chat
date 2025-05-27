@@ -22,7 +22,7 @@ const getUniqueChatroomIds = async (req, res) => {
     const chatroomIds = await getAllChatroomIds();
 
     if (!chatroomIds || chatroomIds.length === 0) {
-      return res.status(404).json({ error: "No chatroomIds found" });
+      return res.status(200).json({ chatroomIds: [] });
     }
 
     res.status(200).json({ chatroomIds });
