@@ -5,6 +5,7 @@ const CreateLLMAgent = ({ chatroomId, modelOptions, onCreated }) => {
     name: "",
     active: true,
     personality: "",
+    responseConditions: "",
     talkativeness: 10,
     model: modelOptions[0],
   });
@@ -23,6 +24,7 @@ const CreateLLMAgent = ({ chatroomId, modelOptions, onCreated }) => {
           name: "",
           active: false,
           personality: "",
+          responseConditions: "",
           talkativeness: 0,
           model: modelOptions[0],
         });
@@ -32,24 +34,20 @@ const CreateLLMAgent = ({ chatroomId, modelOptions, onCreated }) => {
 
   return (
     <form onSubmit={handleSubmit} className="bg-zinc-800 p-4 rounded mt-4">
-      {["name", "personality", "model"].map((field) => (
+      {["name", "personality"].map((field) => (
         <div key={field} className="mb-3">
-          <label className="text-gray-300 text-sm">{field}</label>
-          {field === "model" ? (
-            <select
+          <label className="text-gray-300 text-sm capitalize">{field}</label>
+
+          {field === "personality" ? (
+            <textarea
               required
               className="w-full bg-zinc-900 text-white p-1 rounded mt-1"
-              value={newAgent.model}
+              rows={2}
+              value={newAgent.personality}
               onChange={(e) =>
-                setNewAgent({ ...newAgent, model: e.target.value })
+                setNewAgent({ ...newAgent, personality: e.target.value })
               }
-            >
-              {modelOptions.map((model) => (
-                <option key={model} value={model}>
-                  {model}
-                </option>
-              ))}
-            </select>
+            />
           ) : (
             <input
               required
@@ -65,7 +63,36 @@ const CreateLLMAgent = ({ chatroomId, modelOptions, onCreated }) => {
       ))}
 
       <div className="mb-3">
-        <label className="text-gray-300 text-sm">talkativeness</label>
+        <label className="text-gray-300 text-sm">Response Conditions</label>
+        <textarea
+          className="w-full bg-zinc-900 text-white p-1 rounded mt-1"
+          rows={1}
+          placeholder="(Optional)ex.. last message has @name"
+          value={newAgent.responseConditions}
+          onChange={(e) =>
+            setNewAgent({ ...newAgent, responseConditions: e.target.value })
+          }
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="text-gray-300 text-sm capitalize">Model</label>
+        <select
+          required
+          className="w-full bg-zinc-900 text-white p-1 rounded mt-1"
+          value={newAgent.model}
+          onChange={(e) => setNewAgent({ ...newAgent, model: e.target.value })}
+        >
+          {modelOptions.map((model) => (
+            <option key={model} value={model}>
+              {model}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mb-3">
+        <label className="text-gray-300 text-sm">Talkativeness</label>
         <input
           required
           className="w-full bg-zinc-900 text-white p-1 rounded mt-1"
@@ -84,7 +111,7 @@ const CreateLLMAgent = ({ chatroomId, modelOptions, onCreated }) => {
       </div>
 
       <div className="mb-3">
-        <label className="text-gray-300 text-sm">active</label>
+        <label className="text-gray-300 text-sm">Active</label>
         <input
           type="checkbox"
           className="ml-2"
