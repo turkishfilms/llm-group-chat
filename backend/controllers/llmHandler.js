@@ -54,6 +54,7 @@ async function maybeTriggerAgent(agent, message, totalAgents) {
   const aiReply = await getLLMResponse({
     name: agent.name,
     personality: agent.personality,
+    responseConditions: agent.responseConditions,
     chatlog: chatLog,
     model: agent.model || "llama-3.1-8b-instant",
   });
@@ -78,7 +79,7 @@ async function runLLMAgentTriggers(message) {
   const total = activeAgents.length;
 
   for (const agent of activeAgents) {
-    await sleep(10000); // timer between and before first response (gives it thinking time feel)
+    await sleep(7000); // timer between and before first response (gives it thinking time feel)
     await maybeTriggerAgent(agent, message, total);
   }
 }

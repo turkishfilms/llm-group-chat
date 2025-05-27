@@ -10,13 +10,7 @@ const getChatMessages = async (req, res) => {
     const { chatroomId } = req.params;
     const chatMessages = await getMessagesByChatroom(chatroomId);
 
-    if (chatMessages.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "No messages found for this chatroomId" });
-    }
-
-    res.status(200).json({ chatMessages });
+    res.status(200).json({ chatMessages: chatMessages || [] });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -28,7 +22,7 @@ const getUniqueChatroomIds = async (req, res) => {
     const chatroomIds = await getAllChatroomIds();
 
     if (!chatroomIds || chatroomIds.length === 0) {
-      return res.status(404).json({ error: "No chatroomIds found" });
+      return res.status(200).json({ chatroomIds: [] });
     }
 
     res.status(200).json({ chatroomIds });

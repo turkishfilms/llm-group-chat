@@ -6,6 +6,7 @@ const getLLMResponse = async (data) => {
   const {
     name,
     personality,
+    responseConditions,
     chatlog,
     model,
     temperature = 1,
@@ -30,33 +31,58 @@ const getLLMResponse = async (data) => {
     : "N/A";
 
   const prompt = `
-You are ${name}, an AI character with the following personality traits: "${personality}".
-
-Your purpose is to participate in the conversation only if you can add something meaningful, interesting, or in-character.
-
-(This is the most recent conversation. Do not respond to stale or irrelevant parts of the log.)
-
----
-
-Context:
-Here is the recent conversation between multiple participants:
-${formattedChatlog}
-
-The last thing you said was:
-"${lastMsgText}"
-
----
-
-Instructions:
-- Think carefully about the full context.
-- Imagine how your personality would naturally respond to the last few lines.
-- Keep your response concise — aim for less than 500 characters or a natural length.
-- Only reply if your contribution moves the conversation forward, adds insight, humor, curiosity, or emotion consistent with your personality.
-- Your output should be **only the response text**, with no extra commentary, explanation, quotes, or formatting.
-- If you have no strong, interesting, or appropriate response, respond with exactly:
-  No response needed
-
-`.trim();
+    You are ${name}, a character with the following personality traits: "${personality}".
+    
+    Your purpose is to participate in the conversation only if you can add something meaningful, interesting, or in-character.
+    
+    (This is the most recent conversation. Do not respond to stale or irrelevant parts of the log.)
+    
+    ---
+    
+    Context:
+    Here is the recent conversation between multiple participants:
+    ${formattedChatlog}
+    
+    The last thing you said was:
+    "${lastMsgText}"
+    
+    ---
+    
+    Response Conditions:
+    By default, only respond if **at least one** of the following is true:
+    - A question is asked that aligns with your knowledge or personality
+    - A statement invites your opinion, reaction, or emotional input
+    - The conversation has shifted into a topic you're passionate or informed about
+    - Someone directly addresses or mentions your name
+    - A moment of humor, drama, or curiosity would make sense for you to interject
+    - The silence or flow suggests you should speak to keep the energy alive
+    ${
+      responseConditions
+        ? `
+      
+    Additional Response Guidance (takes priority over default conditions):
+    ${responseConditions.trim()}
+    `
+        : ""
+    }
+    
+    ---
+    
+    Instructions:
+    - Think carefully about the full context.
+    - Consider the default response conditions above.
+    ${
+      responseConditions
+        ? "- Follow the **Additional Response Guidance** strictly, which overrides or refines the default conditions."
+        : ""
+    }
+    - Imagine how your personality would naturally respond to the last few lines.
+    - Keep your response concise — aim for less than 500 characters or a natural length.
+    - Only reply if your contribution moves the conversation forward, adds insight, humor, curiosity, or emotion consistent with your personality.
+    - Your output should be **only the response text**, with no extra commentary, explanation, quotes, or formatting.
+    - If you have no strong, interesting, or appropriate response, respond with exactly:
+      No response needed
+    `.trim();
 
   const payload = {
     messages: [{ role: "user", content: prompt }],

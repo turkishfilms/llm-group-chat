@@ -37,7 +37,9 @@ const ChatroomIdList = ({ setChatroomId }) => {
           ))}
         </ul>
       ) : (
-        <p className="text-center text-gray-400">No chatrooms found</p>
+        <p className="text-center text-gray-400">
+          Failed to load any chatrooms
+        </p>
       )}
     </div>
   );

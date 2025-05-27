@@ -21,6 +21,10 @@ const llmAgentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  responseConditions: {
+    type: String,
+    required: false,
+  },
   talkativeness: {
     type: Number, // Cooldown in seconds to talk again
     required: true,

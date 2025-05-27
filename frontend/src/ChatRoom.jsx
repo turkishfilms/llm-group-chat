@@ -85,7 +85,7 @@ export default function ChatRoom({
   const FIVE_SECONDS = 5 * 1000;
   useEffect(() => {
     // Reset messages when chatroom changes
-
+    if (!isActive || !chatroomId) return;
     setMessages([
       {
         username: "System",
@@ -103,7 +103,7 @@ export default function ChatRoom({
 
     // Clean up on chatroomId change or unmount
     return () => clearInterval(interval);
-  }, [chatroomId]);
+  }, [chatroomId, isActive]);
 
   useEffect(() => {
     //Always scroll to bottom of chat on new message
