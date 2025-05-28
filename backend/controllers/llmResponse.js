@@ -94,13 +94,21 @@ const getLLMResponse = async (data) => {
   };
 
   try {
+    //can add multiple groq keys to .env and this will choose a random
+    //so you can get more request for free
+    const groqKeys = Object.entries(process.env)
+      .filter(([key]) => key.startsWith("GROQ_CLOUD_API_KEY"))
+      .map(([, value]) => value);
+
+    const randomKey = groqKeys[Math.floor(Math.random() * groqKeys.length)];
+
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.GROQ_CLOUD_API_KEY}`,
+          Authorization: `Bearer ${randomKey}`,
         },
         body: JSON.stringify(payload),
       }
