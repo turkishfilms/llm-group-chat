@@ -18,6 +18,7 @@ const {
 } = require("../db/handler");
 
 const getLLMResponse = require("./llmResponse");
+const LLMRESPONSELAG = 5000; //time in between LLM responses
 
 function cooldownReady(agent, lastAgentMessageTimestamp) {
   const cooldownMs = (agent.talkativeness || 0) * 1000;
@@ -69,7 +70,7 @@ async function maybeTriggerAgent(agent, message, totalAgents) {
     });
 
     // Now trigger agents with the new AI message
-    await runLLMAgentTriggers(newAIMessage);
+    //await runLLMAgentTriggers(newAIMessage);
   }
 }
 
@@ -79,7 +80,7 @@ async function runLLMAgentTriggers(message) {
   const total = activeAgents.length;
 
   for (const agent of activeAgents) {
-    await sleep(7000); // timer between and before first response (gives it thinking time feel)
+    await sleep(LLMRESPONSELAG); // timer between and before first response (gives it thinking time feel)
     await maybeTriggerAgent(agent, message, total);
   }
 }
